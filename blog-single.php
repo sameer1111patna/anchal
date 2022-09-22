@@ -19,13 +19,25 @@
 
 <?php include "inc/header.php"; ?>
 
-
+<?php
+        $i=0;
+        $stmt = $classhelper->db_con->prepare("SELECT * FROM `banner_tb` order by id desc");
+        $stmt->execute();
+        $row=$stmt->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+        
+    ?>
+<style>
+   .title-bg-seven {
+    background-image:url(admin/upload/<?php echo $acivity_banner; ?>)!important;
+}
+</style>
 <?php
 
-$blogid=basename(htmlspecialchars($_GET['url']), ".php");
+$blogid=$_GET['id'];
 
 echo $blogid;
-$stmt = $classhelper->db_con->prepare("SELECT * FROM `activity_tb` where `pagename`=:blogid");
+$stmt = $classhelper->db_con->prepare("SELECT * FROM `activity_tb` where `id`=:blogid");
 
 $stmt->bindParam(":blogid",$blogid);
 $stmt->execute();
@@ -77,7 +89,7 @@ $stmt->execute();
 <div class="col-lg-8">
 <div class="details-item">
 <div class="details-img">
-<img src="data:image/jpeg;base64,<?php echo base64_encode($portfolioimage); ?>"  alt="Details">
+<img src="admin/upload/<?php echo $portfolioimage; ?>"  alt="Details">
 <ul>
 <li>
 <i class="icofont-calendar"></i>
@@ -91,16 +103,7 @@ By - <a href="#">Admin</a>
 <h2><?php echo $portfoliotitle; ?></h2>
 <p><?php echo $portfoliodescription; ?></p>
 
-<!--<div class="img-area">
-<div class="row">
-<div class="col-sm-6 col-lg-6">
-<img src="assets/img/blog/blog1.jpg" alt="Details">
-</div>
-<div class="col-sm-6 col-lg-6">
-<img src="assets/img/blog/blog2.jpg" alt="Details">
-</div>
-</div>
-</div>-->
+
 </div>
 <div class="details-share">
 <div class="row">
@@ -140,59 +143,7 @@ By - <a href="#">Admin</a>
 </div>
 </div>
 </div>
-<!--<div class="details-comment">
-<h3>Comments (02)</h3>
-<ul>
-<li>
-<img src="assets/img/blog/blog-comment1.jpg" alt="Details">
-<h4>Marcel Proust</h4>
-<span>04 July, 2020</span>
-<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis, saepe veniam id quo repellat consectetur architecto iste eius, voluptas ad velit atque. Voluptate quas labore sapiente praesentium, autem ullam esse.</p>
-<a href="#">Reply</a>
-</li>
-<li>
-<img src="assets/img/blog/blog-comment2.jpg" alt="Details">
-<h4>Jac Jacson</h4>
-<span>05 July, 2020</span>
-<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corporis, saepe veniam id quo repellat consectetur architecto iste eius, voluptas ad velit atque. Voluptate quas labore sapiente.</p>
-<a href="#">Reply</a>
-</li>
-</ul>
-</div>
-<div class="details-post">
-<h3>Your comment</h3>
-<form>
-<div class="row">
-<div class="col-lg-6">
-<div class="form-group">
-<label>
-<i class="icofont-user-alt-3"></i>
-</label>
-<input type="text" class="form-control" placeholder="name">
-</div>
-</div>
-<div class="col-lg-6">
-<div class="form-group">
-<label>
-<i class="icofont-ui-email"></i>
-</label>
-<input type="email" class="form-control" placeholder="Email">
-</div>
-</div>
-<div class="col-lg-12">
-<div class="form-group">
-<label>
-<i class="icofont-comment"></i>
-</label>
-<textarea name="your-comment" rows="8" class="form-control" placeholder="Write comment"></textarea>
-</div>
-</div>
-<div class="col-lg-12">
-<button type="submit" class="btn common-btn">Post A Comment</button>
-</div>
-</div>
-</form>
-</div>-->
+
 </div>
 </div>
 <div class="col-lg-4">
@@ -237,7 +188,7 @@ By - <a href="#">Admin</a>
 
  <?php
 
-$stmttech = $classhelper->db_con->prepare("SELECT * FROM `activity_tb` where `pagename`<>:blogid");
+$stmttech = $classhelper->db_con->prepare("SELECT * FROM `activity_tb` where `id`<>:blogid");
 
 $stmttech->bindParam(":blogid",$blogid);
 
@@ -253,18 +204,18 @@ while($rowtech=$stmttech->fetch(PDO::FETCH_ASSOC))
                     
                      
                        $techdate=$date;
-                       $technewspagename=$pagename;
+                      
                       
 
                        ?>
 <div class="post-inner">
 <ul class="align-items-center">
 <li>
-<img src="data:image/jpeg;base64,<?php echo base64_encode($technewsimage); ?>" style="height:103px;object-fit:cover;" alt="Details">
+<img src="admin/upload/<?php echo $technewsimage; ?>" style="height:103px;object-fit:cover;" alt="Details">
 </li>
 <li>
 <h4>
-<a href="<?php echo $base_url; ?>/blog-single/<?php echo $technewspagename; ?>/"><?php echo $technewstitle; ?></a>
+<a href="<?php echo $base_url; ?>/blog-single/<?php echo $technewsid; ?>/"><?php echo $technewstitle; ?></a>
 </h4>
 <p>By - <a href="#">Admin</a></p>
 </li>
@@ -277,81 +228,11 @@ while($rowtech=$stmttech->fetch(PDO::FETCH_ASSOC))
 ?>
 
 </div>
-<!--<div class="common-right-content widget-item">
-<h3>Categories</h3>
-<ul>
-<li>
-<a href="#">Education (10)</a>
-</li>
-<li>
-<a href="#">Medical (25)</a>
-</li>
-<li>
-<a href="#">Food & Water (14)</a>
-</li>
-<li>
-<a href="#">National Charity (2)</a>
-</li>
-<li>
-<a href="#">Cloth (4)</a>
-</li>
-</ul>
-</div>-->
-<!--<div class="instagram widget-item">
-<h3>Instagram post</h3>
-<div class="row m-0">
-<div class="col-4 col-sm-3 col-lg-4 p-0">
-<div class="instagram-item">
-<img src="assets/img/blog/instagram1.jpg" alt="Instagram">
-<a href="#">
-<i class="icofont-instagram"></i>
-</a>
+
 </div>
 </div>
-<div class="col-4 col-sm-3 col-lg-4 p-0">
-<div class="instagram-item">
-<img src="assets/img/blog/instagram2.jpg" alt="Instagram">
-<a href="#">
-<i class="icofont-instagram"></i>
-</a>
-</div>
-</div>
-<div class="col-4 col-sm-3 col-lg-4 p-0">
-<div class="instagram-item">
- <img src="assets/img/blog/instagram3.jpg" alt="Instagram">
-<a href="#">
-<i class="icofont-instagram"></i>
-</a>
-</div>
-</div>
-<div class="col-4 col-sm-3 col-lg-4 p-0">
-<div class="instagram-item">
-<img src="assets/img/blog/instagram4.jpg" alt="Instagram">
-<a href="#">
-<i class="icofont-instagram"></i>
-</a>
-</div>
-</div>
-<div class="col-4 col-sm-3 col-lg-4 p-0">
-<div class="instagram-item">
-<img src="assets/img/blog/instagram5.jpg" alt="Instagram">
-<a href="#">
-<i class="icofont-instagram"></i>
-</a>
-</div>
-</div>
-<div class="col-4 col-sm-3 col-lg-4 p-0">
-<div class="instagram-item">
-<img src="assets/img/blog/instagram6.jpg" alt="Instagram">
-<a href="#">
-<i class="icofont-instagram"></i>
-</a>
-</div>
-</div>
-</div>
-</div>-->
-</div>
-</div>
+
+
 </div>
 </div>
 </div>

@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
   <?php include "inc/link.php"; ?>
-
-
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -22,7 +20,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Manage About Us Conten</li>
+              <li class="breadcrumb-item active">Manage About Us Content</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -38,29 +36,105 @@
           <div class="col-12">
             <div class="card">
 
+
+<?php 
+
+if(isset($_POST['addbtn'])){
+
+try{
+
+$id=$_POST['sourceid'];
+  
+$description=$_POST['description'];
+
+$today= date('Y-m-d H:i:s');
+
+$filename = $_FILES['image']['name'];
+
+
+	
+	// Select file type
+$imageFileType = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+	
+	// valid file extensions
+$extensions_arr = array("jpg","jpeg","png","gif");
+ 
+	// Check extension
+
+ 	// Upload files and store in database
+move_uploaded_file($_FILES["image"]["tmp_name"],'upload/'.$filename);
+
+// $stmt = $classhelper->db_con->prepare("INSERT INTO `aboutus_tb`(`content`,`image`, `date`) VALUES (:content,:imgData,'$today')");
+
+if(!empty($_FILES['image']['name'])){
+
+  $studentQuery = "UPDATE aboutus_tb SET content='$description', date='$today',image='$filename' WHERE id='$id' ";
+  $result = $classhelper->db_con->query($studentQuery);
+
+}
+else
+{
+  $studentQuery = "UPDATE aboutus_tb SET content='$description',date='$today' WHERE id='$id'";
+  $result = $classhelper->db_con->query($studentQuery);
+}     
+if($result){
+  
+?>
+  
+  <div class="alert alert-success">
+  <strong>Congratulations !</strong> Activity Added Successfully.
+  </div>
+  
+  <?php
+  }else{
+  
+  ?>
+  <div class="alert alert-danger">
+  <strong>Failed</strong>Your Activity not Added Successfully Please Try Again.
+  </div>
+  
+  <?php
+  
+  }
+  
+  }
+  catch(PDOException $ex){
+  
+  ?>
+  
+  <div class="alert alert-danger">
+  <strong>A problem occured!</strong><?php echo $ex->getMessage(); ?>.
+  </div>
+  
+  <?php
+  
+  }
+  
+  
+  }
+
+ ?>
+
+
+
+
+
             <?php
 if($_POST){
-
-
-
 if(isset($_POST['updatebtn'])){
 
   try{
   
-   
-    $content=$_POST['description'];
+   $content=$_POST['description'];
 
-    $sourceid=base64_decode($_POST['sourceid']);
+   $sourceid=base64_decode($_POST['sourceid']);
     
     $today= date('Y-m-d H:i:s');
   
 
 
      
-
-    
-
-      $stmt = $classhelper->db_con->prepare("UPDATE `aboutus_tb` SET `content`=:content,`date`='$today' where `id`=:sourceid");
+$stmt = $classhelper->db_con->prepare("UPDATE `aboutus_tb` SET `content`=:content,`date`='$today' where `id`=:sourceid");
 
 
 
@@ -118,8 +192,12 @@ if(isset($_POST['updatebtn'])){
 }
 
 ?>
-              <div class="card-header">
-                <h3 class="card-title">Manage About Us</h3>
+             <div class="card-header">
+                <h3 class="card-title">Manage Activity</h3>
+
+            
+                    <!--Add Modal-->
+     
 
             
 
@@ -161,38 +239,57 @@ if(isset($_POST['updatebtn'])){
       </div>
 
              <!--Edit Modal Ends-->
-
-  
-
-
-
-
-             
-              </div>
+      </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example1" class="table table-bordered table-hover">
-                  <thead>
-                  <tr>
-                  <th>Id</th>
-                      <th>Description</th>
-                    <th>Date</th>
-                  <th>Manage</th>
-                  
-                  </tr>
-                  </thead>
-                  <tbody>
-                  
-                </tbody>
-                <tfoot>
-                <tr>
-                 <th>Id</th>
-                      <th>Description</th>
-                    <th>Date</th>
-                  <th>Manage</th>
-                </tr>
-                </tfoot>
-              </table>
+              <?php
+                  $i=0;
+                  $stmt = $classhelper->db_con->prepare("SELECT * FROM `aboutus_tb` order by id desc");
+                  $stmt->execute();
+                   $row=$stmt->fetch(PDO::FETCH_ASSOC);
+                  extract($row);
+                           $portfolioid=$id;
+                           $portfoliotitle=$content;
+                           $portfolioimage=$image;
+                           
+			          ?>
+       
+            <div class="modal-header">
+              <h4 class="modal-title">Add Aboutus Content </h4>
+              
+            </div>
+            <form method="post" enctype="multipart/form-data">
+            <div class="modal-body">
+          
+               
+                  <div class="form-group">
+                    <label for="exampleInputFile">About Image</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <input type="file" name="image" class="custom-file-input"  accept=".jpg, .png, .jpeg, .gif|image/*" >
+                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                      </div>
+                      
+                 </div>
+                  </div>
+
+                  <div class="form-group">
+                    
+                    <img src="upload/<?php echo $portfolioimage; ?>">
+                 </div>
+                 <input type="hidden"name="sourceid"value="<?php echo $portfolioid; ?>">
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Description</label>
+                    <textarea name="description" class="form-control ckeditor" id="exampleInputEmail1" placeholder="Enter Description"><?php echo $content;  ?></textarea>
+                  </div>
+               </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" name="addbtn" class="btn btn-primary">Save changes</button>
+              </form>
+            </div>
+         
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -220,51 +317,4 @@ if(isset($_POST['updatebtn'])){
 </body>
 </html>
 
-<script>
-  var tablex;
-$(document).ready(function() {
-   tablex = $('#example1').DataTable( {
-      "responsive": true, "lengthChange": true, "autoWidth": false,
-        "processing": true,
-        "serverSide": true,
-        "columnDefs": [{ 'targets': [0], 'visible': false },{"render": function createManageBtn(data, type, row) {
 
-
-return '<button id="manageBtn" type="button" onclick="edit(this,'+row['DT_RowId']+')" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></button>';
-}, "data": null, "targets": [3]}],
-        
-        "ajax": $.fn.dataTable.pipeline( {
-            url: '<?php echo $admin_base_url; ?>/exec/fetch_about/',
-            pages: 5 // number of pages to cache
-        } )
-    } );
-
-      
-     
-
-      });
-
-      function edit(el,row) {
-        var indx= $(row).index();
-        
-        var data_row = tablex.rows(indx).data().toArray();
-
-      
-       
-var totalelement=data_row[0].length;
-
-
-
-$('#contentx').children().remove();
-
-$('#contentx').append(`<input type="hidden" name="sourceid" value="${btoa(data_row[0][0])}"><div class="form-group"> <label for="exampleInputEmail1">Description</label> <textarea name="description" class="form-control ckeditor"  id="exampleInputEmail1" placeholder="Enter Description">${data_row[0][1]}</textarea> </div> `);
-CKEDITOR.replaceAll( 'ckeditor' ); 
-$('#editmodal').modal('show');
-
-        }
-  
-     
-             if ( window.history.replaceState ) {
-       window.history.replaceState( null, null, window.location.href );
-     }
-    </script>

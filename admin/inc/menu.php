@@ -127,6 +127,44 @@
               </p>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a href="<?php echo $admin_base_url; ?>/contact-details.php" class="nav-link <?php if(basename($_SERVER['REQUEST_URI'])=='managedonation'){ ?>active<?php } ?>">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Manage Contact Details
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="<?php echo $admin_base_url; ?>/banner.php" class="nav-link <?php if(basename($_SERVER['REQUEST_URI'])=='managedonation'){ ?>active<?php } ?>">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Manage Banner
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="<?php echo $admin_base_url; ?>/footer-description.php" class="nav-link <?php if(basename($_SERVER['REQUEST_URI'])=='managedonation'){ ?>active<?php } ?>">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Manage Footer description
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="<?php echo $admin_base_url; ?>/goal-mission.php" class="nav-link <?php if(basename($_SERVER['REQUEST_URI'])=='managedonation'){ ?>active<?php } ?>">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Manage Goal Mission
+              </p>
+            </a>
+          </li>
+
+
           <li class="nav-item">
             <a href="<?php echo $admin_base_url; ?>/manageabout.php" class="nav-link <?php if(basename($_SERVER['REQUEST_URI'])=='manageabout'){ ?>active<?php } ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>

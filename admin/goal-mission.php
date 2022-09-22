@@ -17,12 +17,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Manage Slider</h1>
+            <h1 class="m-0">Manage Goal Mission</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Manage Slider</li>
+              <li class="breadcrumb-item active">Manage Goal Mission</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -50,20 +50,16 @@ if($validx){
   ?>
   
   <div class="alert alert-success">
-  <strong>Congratulations !</strong> Blog Deleted Successfully.
+  <strong>Congratulations !</strong> Gallery Deleted Successfully.
   </div>
   
   
   <?php
   
 }else{
-
-
-  ?>
-  
-  
+?>
   <div class="alert alert-danger">
-  <strong>Failed</strong>Your Blog Not Deleted Please Try Again.
+  <strong>Failed</strong>Your Gallery Not Deleted Please Try Again.
   </div>
   
   <?php
@@ -78,14 +74,12 @@ if(isset($_POST['updatebtn'])){
   
     $title1=htmlspecialchars($_POST['title']);
 
-    $sub_title1=$_POST['sub_title'];
+ 
 
     $sourceid=base64_decode($_POST['sourceid']);
     
     $today= date('Y-m-d H:i:s');
-  
-    $str = preg_replace("/[^A-Za-z0-9 ]/", '', $title1);
-    $pagename1=str_replace(' ', '-', strtolower($str));
+
      
        $today= date('Y-m-d H:i:s');
 
@@ -94,26 +88,19 @@ if(isset($_POST['updatebtn'])){
      
       $imgData = (file_get_contents($_FILES['image']['tmp_name']));
 
-      $stmt = $classhelper->db_con->prepare("UPDATE `slider_tb` SET `title`=:title,`image`=:image,`sub_title`=:sub_title where `id`=:sourceid");
+      $stmt = $classhelper->db_con->prepare("UPDATE `gallery_tb` SET `title`=:title,`image`=:image where `id`=:sourceid");
       $stmt->bindParam(":image",$imgData);
 
     }else{
 
 
-      $stmt = $classhelper->db_con->prepare("UPDATE `slider_tb` SET `title`=:title,`sub_title`=:sub_title where `id`=:sourceid");
+      $stmt = $classhelper->db_con->prepare("UPDATE `gallery_tb` SET `title`=:title where `id`=:sourceid");
 
     }
+ $stmt->bindParam(":title",$title1);
 
 
-  
-  
-  
-  $stmt->bindParam(":title",$title1);
-
-  $stmt->bindParam(":sub_title",$sub_title1);
-
-
-  $stmt->bindParam(":sourceid",$sourceid);
+$stmt->bindParam(":sourceid",$sourceid);
   
   
   
@@ -122,7 +109,7 @@ if(isset($_POST['updatebtn'])){
   ?>
   
   <div class="alert alert-success">
-  <strong>Congratulations !</strong> Activity Updated Successfully.
+  <strong>Congratulations !</strong> Gallery Updated Successfully.
   </div>
   
   
@@ -136,7 +123,7 @@ if(isset($_POST['updatebtn'])){
   
   
   <div class="alert alert-danger">
-  <strong>Failed</strong>Your Activity Update Failed Please Try Again.
+  <strong>Failed</strong>Your Gallery Update Failed Please Try Again.
   </div>
   
   <?php
@@ -163,36 +150,20 @@ if(isset($_POST['addbtn'])){
   try{
   
   $title=htmlspecialchars($_POST['title']);
-
-  $sub_title=$_POST['sub_title'];
-
+  $description=htmlspecialchars($_POST['description']);
+  $icon=htmlspecialchars($_POST['icon']);
   
-  $today= date('Y-m-d H:i:s');
 
-
-  
-  $filename = $_FILES['image']['name'];
-	
-	// Select file type
-	$imageFileType = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
-	
-	// valid file extensions
-	$extensions_arr = array("jpg","jpeg","png","gif");
- 
-	// Check extension
-
- 	// Upload files and store in database
-	move_uploaded_file($_FILES["image"]["tmp_name"],'upload/'.$filename);
-
-  $stmt = $classhelper->db_con->prepare("INSERT INTO `slider_tb`(`title`, `image`, `sub_title`, `date`) VALUES (:title,:imgData,:sub_title,'$today')");
+  $stmt = $classhelper->db_con->prepare("INSERT INTO `goal_mission`(`title`,`description`,`icon`) VALUES (:title,:description,:icon)");
   
   $stmt->bindParam(":title",$title);
+   
+  $stmt->bindParam(":description",$description);
 
-  $stmt->bindParam(":sub_title",$sub_title);
+  $stmt->bindParam(":icon",$icon);
 
-  $stmt->bindParam(":imgData",$filename);
   
- if($stmt->execute()){
+  if($stmt->execute()){
   
   ?>
   
@@ -200,10 +171,16 @@ if(isset($_POST['addbtn'])){
   <strong>Congratulations !</strong> Activity Added Successfully.
   </div>
   
+  
   <?php
+  
+  
   }else{
   
+  
   ?>
+  
+  
   <div class="alert alert-danger">
   <strong>Failed</strong>Your Activity not Added Successfully Please Try Again.
   </div>
@@ -232,7 +209,7 @@ if(isset($_POST['addbtn'])){
 
 ?>
               <div class="card-header">
-                <h3 class="card-title">Manage Activity</h3>
+                <h3 class="card-title">Manage Goal Mission</h3>
 
             
                 <button type="button" style="float:right;"  data-toggle="modal" data-target="#addmodal" class="btn bg-gradient-primary btn-lg"><i class="fa fa-plus"></i></button>
@@ -241,7 +218,7 @@ if(isset($_POST['addbtn'])){
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Add Activity </h4>
+              <h4 class="modal-title">Add Goal Mission </h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
@@ -254,25 +231,21 @@ if(isset($_POST['addbtn'])){
                     <label for="exampleInputEmail1">Title</label>
                     <input type="text" name="title" class="form-control" id="exampleInputEmail1" placeholder="Enter Title">
                   </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Description</label>
+                    <textarea name="description"class="form-control"></textarea>
+                   
+                  </div>
+
+                  <div class="form-group">
+                    <label for="exampleInputEmail1">Icon</label>
+                    <input type="text" name="icon" class="form-control" id="exampleInputEmail1" placeholder="Enter Title">
+                  </div>
                 
                  
-                  <div class="form-group">
-                    <label for="exampleInputFile">Feature Image</label>
-                        <div class="input-group">
-                          <div class="custom-file">
-                            <input type="file" name="image" class="custom-file-input" id="exampleInputFile"  accept="image/*"/>
-                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                          </div>
-                        </div>
-                    </div>
-                 
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Sub Title</label>
-                    <input type="text" name="sub_title" class="form-control" id="exampleInputEmail1" placeholder="Enter Sub Title">
-                  </div>
                
-                  
-             
+                 
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -303,16 +276,8 @@ if(isset($_POST['addbtn'])){
             <div class="modal-body">
           
                <div id="contentx">
-
-
-               </div>
-                
-               
-               
-
-              
-             
             </div>
+                </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               <button type="submit" name="updatebtn" class="btn btn-primary">Save changes</button>
@@ -341,7 +306,7 @@ if(isset($_POST['addbtn'])){
             <div class="modal-footer">
             <form method="post"> 
             <input type="hidden" name="img" value="<?php echo base64_encode('1'); ?>">
-            <input type="hidden" name="tbname" value="<?php echo base64_encode('slider_tb'); ?>">
+            <input type="hidden" name="tbname" value="<?php echo base64_encode('gallery_tb'); ?>">
             <div id="delcontent"></div>
               <button type="button" class="btn btn-outline-light" data-dismiss="modal">No</button>
               <button type="submit" name="delete_btn" class="btn btn-outline-success">Yes</button>
@@ -366,42 +331,37 @@ if(isset($_POST['addbtn'])){
                   <tr>
                   <th>Id</th>
                     <th>Title</th>
-                    <th>Image</th>
                     <th>Description</th>
-                    <th>Date</th>
-                    <th>Manage</th>
+                     <th>Manage</th>
                   
                   </tr>
                   </thead>
                   <tbody>
-
                   <?php
-                    $i=1;
-                    $stmt = $classhelper->db_con->prepare("SELECT * FROM `slider_tb` order by id desc");
-                    $stmt->execute();
-                    while($row=$stmt->fetch(PDO::FETCH_ASSOC))
-                      {
+                  $i=1;
+                  $stmt = $classhelper->db_con->prepare("SELECT * FROM `goal_mission` order by id desc");
+                  $stmt->execute();
+                  while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+                    {
 
-		                       extract($row);
-                           $portfolioid=$id;
-                           $portfoliotitle=$title;
-                           $portfolioimage=$image;
-                           $sub_title=$sub_title;
-                           $blogdate=$date;
-                          
-			                ?>
+                      extract($row);
+                        $portfolioid=$id;
+                        $goaltitle=$title;
+                        $goaldescription=$description;
+                       
+                        
+                    ?>
+
+                    
                     <tr>
-                      <td><?php echo $i ; ?></td>
-                      <td><?php echo $title ; ?></td>
-                      <td><img src="upload/<?php echo $portfolioimage;?>" width="50px;"></td>
-                      <td><?php echo $sub_title; ?></td>
-                      <td><?php echo $blogdate;?></td>
-                      <td><a href="edit-slider.php?id=<?php echo $portfolioid;?>"class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
-                         <a href="delete.php?id=slider&action=<?php echo $portfolioid;?>" onclick="return confirm('Are You Sure Want To Delete This ?')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                    <td><?php echo $i ; ?></td>
+                    <td><?php echo $title ; ?></td>
+                    <td><?php echo $goaldescription;?></td>
+                    <td>   
+                    <a href="edit-goal-mission.php?id=<?php echo $portfolioid;?>"class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>  
+                    <a href="delete.php?id=goal-mission&action=<?php echo $portfolioid;?>"class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure Want To Delete This ?')"><i class="fa fa-trash"></i></a>
                       </td>
-                      
                     </tr>
-
                     <?php
                     $i++;
                     }
@@ -411,11 +371,8 @@ if(isset($_POST['addbtn'])){
                 <tr>
                 <th>Id</th>
                     <th>Title</th>
-                    <th>Image</th>
                     <th>Description</th>
-                    <th>Date</th>
-                  
-                   <th>Manage</th>
+                    <th>Manage</th>
                 </tr>
                 </tfoot>
               </table>

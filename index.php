@@ -15,15 +15,11 @@
 <?php
 
 $stmt = $classhelper->db_con->prepare("SELECT * FROM `slider_tb` order by id desc");
+$stmt->execute();
+while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+   {
 
-
-	$stmt->execute();
-
-
-		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
-				{
-
-						   extract($row);
+		extract($row);
                            $portfolioid=$id;
                            $portfoliotitle=$title;
                            $portfolioimage=$image;
@@ -36,7 +32,7 @@ $stmt = $classhelper->db_con->prepare("SELECT * FROM `slider_tb` order by id des
                           ?>
                     
 
-<div class="banner-slider-item" style='background-image: url("data:image/jpeg;base64,<?php echo base64_encode($portfolioimage); ?>");' >
+<div class="banner-slider-item" style='background-image: url("admin/upload/<?php echo $portfolioimage; ?>");' >
 <div class="d-table">
 <div class="d-table-cell">
 <div class="container">
@@ -45,8 +41,8 @@ $stmt = $classhelper->db_con->prepare("SELECT * FROM `slider_tb` order by id des
 <p><?php echo $sub_title; ?>
 </p>
 <div class="banner-btn-area">
-<a class="common-btn banner-btn" href="<?php echo $base_url; ?>/contact">Contact Us</a>
-<a class="common-btn" href="<?php echo $base_url; ?>/donation">Donate Now</a>
+<a class="common-btn banner-btn" href="<?php echo $base_url; ?>/contact.php">Contact Us</a>
+<a class="common-btn" href="<?php echo $base_url; ?>/donation.php">Donate Now</a>
 </div>
 </div>
 </div>
@@ -61,13 +57,36 @@ $stmt = $classhelper->db_con->prepare("SELECT * FROM `slider_tb` order by id des
 </div>
 </div>
 
+<?php
+
+
+$stmt = $classhelper->db_con->prepare("SELECT * FROM `aboutus_tb` order by id desc");
+
+$stmt->execute();
+
+
+		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+				{
+
+						   extract($row);
+                           $portfolioid=$id;
+                           $content=$content;
+                           $image=$image;
+                        
+                          
+                          
+				}
+				
+                          
+                          ?>
+
 
 <div class="about-area pt-100 pb-70">
 <div class="container">
 <div class="row align-items-center">
 <div class="col-lg-6">
 <div class="about-img">
-<img src="assets/img/WhatsApp Image 2021-03-25 at 12.30.45 PM.jpeg" alt="About">
+<img src="admin/upload/<?php echo $image;?>" alt="About">
 </div>
 </div>
 <div class="col-lg-6">
@@ -76,12 +95,12 @@ $stmt = $classhelper->db_con->prepare("SELECT * FROM `slider_tb` order by id des
 <span class="sub-title">About us</span>
 <h2>About Anchal</h2>
 </div>
-<span class="about-span">Anchal is a non-profitable organization that was, is, and will always be by your side in times of desolation.</span>
-<p>We are a crowdfunding platform that helps us to generate funds from across the country for education, healthcare, disaster reliefs, and many such purposes. Our passionate volunteers work round the clock and have mastered and counted the act of giving.</p>
-<p>Our team ensures the fundraising is for the right cause and also makes sure there is no misuse of our donor’s trust. Backed by a utilitarian notion, and using the power of social media and internet banking, Anchal has gained huge popularity in terms to raise funds for personal pressing needs.</p>
+<p>
+    <?php echo $content; ?>
+</p>
 <div class="about-btn-area">
-<a class="common-btn about-btn" href="<?php echo $base_url; ?>/contact">Contact Us</a>
-<a class="common-btn" href="<?php echo $base_url; ?>/about">Read More</a>
+<a class="common-btn about-btn" href="<?php echo $base_url; ?>/contact.php">Contact Us</a>
+<a class="common-btn" href="<?php echo $base_url; ?>/about.php">Read More</a>
 </div>
 </div>
 </div>
@@ -134,25 +153,41 @@ $stmt = $classhelper->db_con->prepare("SELECT * FROM `slider_tb` order by id des
 
 <section class="donations-area three pt-100 pb-70">
 <div class="container">
+
 <div class="section-title">
 <span class="sub-title">Causes to care</span>
 <h2>We care for you and your surroundings</h2>
 <p>We exist for non-profits, social enterprises, community groups, activists,lorem politicians and individual citizens that are making.</p>
 </div>
 <div class="row">
+
+
+
+
+
+<?php
+
+
+$stmt = $classhelper->db_con->prepare("SELECT * FROM `activity_tb` WHERE status='1'");
+$stmt->execute();
+$users = $stmt->fetchAll();
+    foreach($users as $user)
+    {
+
+    ?>
+
 <div class="col-sm-6 col-lg-4">
 <div class="donation-item">
 <div class="top">
 <!--a class="tags" href="#">#Medical</a-->
 <h3>
-<a href="<?php echo $base_url; ?>/donation">Care for the environment
+<a href="<?php echo $base_url; ?>/donation"><?php echo $user['title']; ?>
 </a>
 </h3>
-<p>We all know that green life equals a healthy life. Living by this notion, our target is to make the locality a lot greener and cleaner. We all talk about global warming but only a few feel like acting. But by taking baby steps, we intend to make a difference. We have scheduled weekly planting of saplings to make our community greener and cleaner. But our milestone is something huge. We intend to plant approximately 1 lakh trees within the next 5 years around Memari. You can always contribute and volunteer to participate and make your environment a better place to live.
-</p>
+<p><?php  echo $user['description']; ?></p>
 </div>
 <div class="img">
-<img src="assets/img/ac1.jpg" alt="Donation">
+<img src="admin/upload/<?php echo $user['image'];; ?>" alt="Donation">
 <!--a class="common-btn" href="donation-details.html">Donate Now</a-->
 </div>
 <div class="inner">
@@ -171,163 +206,19 @@ $stmt = $classhelper->db_con->prepare("SELECT * FROM `slider_tb` order by id des
 </div>
 </div>
 </div>
-<div class="col-sm-6 col-lg-4">
-<div class="donation-item">
-<div class="top">
-<!--a class="tags" href="#">#Education</a-->
-<h3>
-<a href="<?php echo $base_url; ?>/donation">Festivities for all </a>
-</h3>
-<p>Yes, we indeed live by festivals, but these festivals are a major source of environmental pollution. Anchal takes the initiative to conduct a clean-up drive to clean out flowers and garlands after Durga puja, collect flags from the street after every Independence Day, and so on. You can either contribute or become a volunteer and be a part of this noble act. 
-We believe that festivals are for all, and thus especially during these days, try to reach out to as many people as possible. We gift them with dresses, food, and other necessary items that can make their life a tad bit easy. 
- 
-</p>
-</div>
-<div class="img">
-<img src="assets/img/ac4.jpg" alt="Donation">
-<!--a class="common-btn" href="donation-details.html">Donate Now</a-->
-</div>
-<div class="inner">
-<div class="bottom">
-<div class="skill">
-<div class="skill-bar skill2 wow fadeInLeftBig">
-<!--span class="skill-count2">95%</span-->
-</div>
-</div>
-<!--ul>
-<li>Raised: $6,500.00</li>
-<li>Goal: $8,050.00</li>
-</ul-->
-<!--h4>Donated by <span>50 people</span></h4-->
-</div>
-</div>
-</div>
-</div>
-<div class="col-sm-6 col-lg-4">
-<div class="donation-item">
-<div class="top">
-<!--a class="tags" href="#">#Family</a-->
-<h3>
-<a href="<?php echo $base_url; ?>/donation">Education to the needy</a>
- </h3>
-<p>Anchal intends to overcome all boundaries and support education. With the help of your benefactors, we can offer quality education even to the tribal areas. 
-We also educate children with the concept of ‘good touch and bad touch’ whereby they can differentiate and be able to protect themselves. Also, for students who can’t afford education, we conduct special education every Sunday on school premises free of cost. 
 
-</p>
-</div>
-<div class="img">
-<img src="assets/img/ac6.jpg" alt="Donation" style="height: 348px;
-    object-fit: cover;">
-<!--a class="common-btn" href="donation-details.html">Donate Now</a-->
-</div>
-<div class="inner">
-<div class="bottom">
-<div class="skill">
-<div class="skill-bar skill3 wow fadeInLeftBig">
-<!--span class="skill-count3">90%</span-->
-</div>
-</div>
-<!--ul>
-<li>Raised: $5,540.00</li>
-<li>Goal: $6,055.00</li>
-</ul>
-<h4>Donated by <span>40 people</span></h4-->
-</div>
-</div>
-</div>
-</div>
-<div class="col-sm-6 col-lg-4">
-<div class="donation-item">
-<div class="top">
-<!--a class="tags" href="#">#Funding</a-->
-<h3>
-<a href="<?php echo $base_url; ?>/donation">Employment to the needy</a>
-</h3>
-<p>Not only education but by teaching hand-skills we were able to provide proper employment scope for many households.</p>
-</div>
-<div class="img">
-<img src="assets/img/ac3.jpg" alt="Donation" style="height: 400px;
-    object-fit: cover;">
-<!--a class="common-btn" href="donation-details.html">Donate Now</a-->
-</div>
-<div class="inner">
-<div class="bottom">
-<div class="skill">
-<div class="skill-bar skill4 wow fadeInLeftBig">
-<!--span class="skill-count4">80%</span-->
-</div>
-</div>
-<!--ul>
-<li>Raised: $5,56.00</li>
-<li>Goal: $6,85.00</li>
-</ul>
-<h4>Donated by <span>30 people</span></h4-->
-</div>
-</div>
-</div>
-</div>
-<div class="col-sm-6 col-lg-4">
-<div class="donation-item">
-<div class="top">
-<!--a class="tags" href="#">#Relief</a-->
-<h3>
-<a href="<?php echo $base_url; ?>/donation">Women empowerment</a>
-</h3>
-<p>We bring women out of the household and help them establish themselves. Women tribal areas are mostly affected. But with proper education and teaching them stitching and other artworks, we provide them with a source of income. </p>
-</div>
-<div class="img">
-<img src="assets/img/ac5.jpg" alt="Donation" style="height: 315px;
-    object-fit: cover;">
-<!--a class="common-btn" href="donation-details.html">Donate Now</a-->
-</div>
-<div class="inner">
-<div class="bottom">
-<div class="skill">
-<div class="skill-bar skill5 wow fadeInLeftBig">
- <!--span class="skill-count5">75%</span-->
-</div>
-</div>
-<!--ul>
-<li>Raised: $5,5.00</li>
-<li>Goal: $3,85.00</li>
-</ul>
-<h4>Donated by <span>20 people</span></h4-->
-</div>
-</div>
-</div>
-</div>
-<div class="col-sm-6 col-lg-4">
-<div class="donation-item">
-<div class="top">
-<!--a class="tags" href="#">#Drought</a-->
-<h3>
-<a href="<?php echo $base_url; ?>/donation">Social responsibilities</a>
-</h3>
-<p>Anchal has a strong affliction from social crimes. And with this passion, we help and stand against any mishappening in society. We intend to the very last and see that justice is being served. 
-But we do not stop here. We make sure the affected person is settled properly and if needed also provide a source of income.
-</p>
-</div>
-<div class="img">
-<img src="assets/img/ac2.jpg" alt="Donation" style="height: 260px;
-    object-fit: cover;">
-<!--a class="common-btn" href="donation-details.html">Donate Now</a-->
-</div>
-<div class="inner">
-<div class="bottom">
-<div class="skill">
-<div class="skill-bar skill6 wow fadeInLeftBig">
-<!--span class="skill-count6">70%</span-->
-</div>
-</div>
-<!--ul>
-<li>Raised: $9,5.00</li>
-<li>Goal: $3,84.00</li>
-</ul>
-<h4>Donated by <span>10 people</span></h4-->
-</div>
-</div>
-</div>
-</div>
+<?php }?>
+
+
+
+
+
+
+
+
+
+
+
 </div>
 </div>
 </section>
@@ -525,9 +416,9 @@ $stmt1 = $classhelper->db_con->prepare("SELECT * FROM `gallery_tb` order by id d
 
 						   extract($row1);
                            $portfolioid=$id;
-                           $portfoliotitle=$name;
+                          
                            $portfolioimage=$image;
-                           $sub_title=$sub_title;
+                          
                           
                           $blogdate=$date;
                           
@@ -535,8 +426,8 @@ $stmt1 = $classhelper->db_con->prepare("SELECT * FROM `gallery_tb` order by id d
                           
                           ?>
 <div class="gallery-item">
-<a href="data:image/jpeg;base64,<?php echo base64_encode($portfolioimage); ?>" data-lightbox="roadtrip">
-<img src="data:image/jpeg;base64,<?php echo base64_encode($portfolioimage); ?>" alt="Gallery" style="height:230px;width:330px;object-fit:cover">
+<a href="admin/upload/<?php echo $portfolioimage; ?>" data-lightbox="roadtrip">
+<img src="admin/upload/<?php echo $portfolioimage; ?>" alt="Gallery" style="height:230px;width:330px;object-fit:cover">
 <i class="icofont-eye"></i>
 </a>
 </div>
@@ -551,7 +442,7 @@ $stmt1 = $classhelper->db_con->prepare("SELECT * FROM `gallery_tb` order by id d
 
 <?php
 
-$stmt2 = $classhelper->db_con->prepare("SELECT * FROM `team_tb` order by id desc");
+$stmt2 = $classhelper->db_con->prepare("SELECT * FROM `team_tb`");
 
 
 	$stmt2->execute();
@@ -588,7 +479,7 @@ $stmt2 = $classhelper->db_con->prepare("SELECT * FROM `team_tb` order by id desc
 <div class="col-sm-6 col-lg-4">
 <div class="team-item">
 <div class="top">
-<img src="data:image/jpeg;base64,<?php echo base64_encode($teamimage); ?>" style="height:620px;object-fit:cover;" alt="Team">
+<img src="admin/upload/<?php echo $teamimage; ?>" style="height:620px;object-fit:cover;" alt="Team">
 
 </div>
 <div class="bottom">

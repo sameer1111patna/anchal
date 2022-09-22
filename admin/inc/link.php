@@ -29,7 +29,7 @@ if($currentpagename=='login.php'){
 
   if($currentpagename<>'login.php'){
 ?>
-    <script>location.replace('<?php echo $admin_base_url; ?>/login/');</script>
+    <script>location.replace('<?php echo $admin_base_url; ?>/login.php');</script>
 
     <?php
   }

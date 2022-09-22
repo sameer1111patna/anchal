@@ -101,18 +101,16 @@ if(isset($_POST['updatebtn'])){
   
        $stm2t = $classhelper->db_con->prepare("SELECT * FROM `activity_tb` where `title`=:title");
   
-  $stm2t->bindParam(":title",$title);
+       $stm2t->bindParam(":title",$title);
   
        $stm2t->execute();
-      $countblog=$stm2t->rowcount();
+       
+       $countblog=$stm2t->rowcount();
   
       if($countblog>'0'){
   
         $pagename1=$pagename1.'-'.$countblog;
-
-
       }
-
     }
 
     if(!empty($_FILES['image']['name'])){
@@ -195,33 +193,29 @@ if(isset($_POST['addbtn'])){
   
   $today= date('Y-m-d H:i:s');
 
-  $str = preg_replace("/[^A-Za-z0-9 ]/", '', $title);
-  $pagename=str_replace(' ', '-', strtolower($str));
+  $filename = $_FILES['image']['name'];
+	
+    // Select file type
+    $imageFileType = strtolower(pathinfo($filename,PATHINFO_EXTENSION));
+    
+    // valid file extensions
+  $extensions_arr = array("jpg","jpeg","png","gif");
    
-     $today= date('Y-m-d H:i:s');
-
-     $stm2t = $classhelper->db_con->prepare("SELECT * FROM `activity_tb` where `pagename`=:title");
-
-$stm2t->bindParam(":title",$pagename);
-
-     $stm2t->execute();
-    $countblog=$stm2t->rowcount();
-
-    if($countblog>'0'){
-
-      $pagename=$pagename.'-'.$countblog;
-    }
-   
-    $imgData = (file_get_contents($_FILES['image']['tmp_name']));
+    // Check extension
   
-  $stmt = $classhelper->db_con->prepare("INSERT INTO `activity_tb`(`title`, `image`, `description`, `date`,`pagename`) VALUES (:title,:imgData,:description,'$today',:pagename)");
+     // Upload files and store in database
+  move_uploaded_file($_FILES["image"]["tmp_name"],'upload/'.$filename);
+
+  
+  $stmt = $classhelper->db_con->prepare("INSERT INTO `activity_tb`(`title`, `image`, `description`, `date`) VALUES (:title,:imgData,:description,'$today')");
   
   $stmt->bindParam(":title",$title);
 
   $stmt->bindParam(":description",$description);
 
-  $stmt->bindParam(":imgData",$imgData);
-  $stmt->bindParam(":pagename",$pagename);
+  $stmt->bindParam(":imgData",$filename);
+
+
   
   
   
@@ -300,7 +294,7 @@ $stm2t->bindParam(":title",$pagename);
                     <label for="exampleInputFile">Feature Image</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <input type="file" name="image" class="custom-file-input" id="exampleInputFile">
+                        <input type="file" name="image" class="custom-file-input" id="exampleInputFile"accept="image/*"/>
                         <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                       </div>
                       
@@ -349,11 +343,7 @@ $stm2t->bindParam(":title",$pagename);
                </div>
                 
                
-               
-
-              
-             
-            </div>
+          </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
               <button type="submit" name="updatebtn" class="btn btn-primary">Save changes</button>
@@ -410,13 +400,62 @@ $stm2t->bindParam(":title",$pagename);
                     <th>Image</th>
                     <th>Description</th>
                     <th>Date</th>
-                    <th>Pagename</th>
+                  
+                    
+                    <th>Status</th>
                    <th>Manage</th>
                   
                   </tr>
                   </thead>
                   <tbody>
-                  
+                  <?php
+                  $i=1;
+                  $stmt = $classhelper->db_con->prepare("SELECT * FROM `activity_tb` order by id desc");
+                  $stmt->execute();
+                  while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+                    {
+
+                      extract($row);
+                        $portfolioid=$id;
+                        $portfoliotitle=$title;
+                        $portfolioimage=$image;
+                        $sub_title=$description;
+                        $blogdate=$date;
+                       
+                        $activestatus=$status;
+                        
+                    ?>
+                  <tr>
+                    <td><?php echo $i ; ?></td>
+                    <td><?php echo $title ; ?></td>
+                    <td><img src="upload/<?php echo $portfolioimage;?>" width="50px;"></td>
+                    <td><?php echo $sub_title; ?></td>
+                    <td><?php echo $blogdate;?></td>
+                   
+                    <td> 
+                      <select name="status" class="form-select status_btnn " dataa-id="<?php echo $portfolioid ; ?>">
+                        <?php $status=array("1"=>"Acite","0"=>"Deactive") ?>
+                        <?php foreach($status as $key=>$status_change)
+                         {
+                           ?>
+                        <?php
+                        echo'<option value="'.$key.'"';if ($key==$activestatus){echo 'selected';}echo '>'.$status_change.'</option>';
+                        ?>
+                        <?php  }
+                         ?>
+                      </select>
+                       </td>
+
+                    <td><a href="edit-activity.php?id=<?php echo $portfolioid;?>"class="btn btn-info btn-sm"><i class="fa fa-edit"></i></a>
+                    
+                    <a href="delete.php?id=activity&action=<?php echo $id;?>"class="btn btn-danger btn-sm"onclick="return confirm('Are You Sure Want To Delete This ?')"><i class="fa fa-trash"></i></a>
+                    
+                    </td>
+                    </tr>
+                    <?php
+                    $i++;
+                    }
+                    ?>
                 </tbody>
                 <tfoot>
                 <tr>
@@ -425,7 +464,7 @@ $stm2t->bindParam(":title",$pagename);
                     <th>Image</th>
                     <th>Description</th>
                     <th>Date</th>
-                    <th>Pagename</th>
+                   
                    <th>Manage</th>
                 </tr>
                 </tfoot>
@@ -459,36 +498,7 @@ $stm2t->bindParam(":title",$pagename);
 
 <script>
   var tablex;
-$(document).ready(function() {
-   tablex = $('#example1').DataTable( {
-      "responsive": true, "lengthChange": true, "autoWidth": false,
-        "processing": true,
-        "serverSide": true,
-        "columnDefs": [{ 'targets': [0], 'visible': false },{"render": function createManageBtn(data, type, row) {
 
-
-return '<button id="manageBtn" type="button" onclick="edit(this,'+row['DT_RowId']+')" class="btn btn-info btn-sm"><i class="fa fa-edit"></i></button><button id="delBtn" type="button" onclick="deletecon(this,'+row[0]+')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>';
-}, "data": null, "targets": [6]}, {
-      'targets': [2],
-      'searchable': false,
-      'orderable':false,
-      'render': function (data, type, full, meta) {
-
-        var imgsrc = 'data:image/*;base64,' + btoa(atob(data)); // here data should be in base64 string
-        return '<img class="img-responsive" src="' + imgsrc +'" alt="tbl_StaffImage" height="100px" width="100px">';
-                        }
-  },],
-        
-        "ajax": $.fn.dataTable.pipeline( {
-            url: '<?php echo $admin_base_url; ?>/exec/fetch_blog/',
-            pages: 5 // number of pages to cache
-        } )
-    } );
-
-      
-     
-
-      });
 
       function edit(el,row) {
         var indx= $(row).index();
@@ -524,3 +534,36 @@ $('#editmodal').modal('show');
        window.history.replaceState( null, null, window.location.href );
      }
     </script>
+
+
+
+<script>
+        $(document).ready(function() {
+        $('.status_btnn').on('change', function() {
+        var status = this.value;
+      
+        var id=$(this).attr('dataa-id');
+      
+        $.ajax({
+        url: "status.php", 
+        type: "POST",
+        data: {
+        status: status,
+        id:id,
+        _token: '{{csrf_token()}}' 
+        },
+        dataType : 'json',
+        success: function(result){
+        
+
+
+window.location.replace("pagehere.html");      
+
+        }
+        });
+
+        });    
+        });
+</script>
+
+

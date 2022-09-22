@@ -4,9 +4,26 @@
 <head>
     <?php include "inc/link.php"; ?>
 </head>
+
+
+
 <body>
 
     <?php include "inc/header.php"; ?>
+
+<?php
+        $i=0;
+        $stmt = $classhelper->db_con->prepare("SELECT * FROM `banner_tb` order by id desc");
+        $stmt->execute();
+        $row=$stmt->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+        
+?>
+<style>
+   .title-bg-nine {
+    background-image:url(admin/upload/<?php echo $galley_banner; ?>)!important;
+}
+</style>
 <style>
     .title-bg-nine {
     background-image: url(assets/img/81786506_2659081867656015_7141842915969466368_o.jpg);
@@ -30,7 +47,7 @@
 <h2>Gallery</h2>
 <ul>
 <li>
-<a href="index.php">Home</a>
+<a href="<?php echo $base_url; ?>">Home</a>
 </li>
 <li>
 <span>Gallery</span>
@@ -67,8 +84,8 @@
                ?>
 <div class="col-sm-6 col-lg-4">
 <div class="gallery-item">
-<a href="data:image/jpeg;base64,<?php echo base64_encode($galimage); ?>" data-lightbox="roadtrip">
-<img src="data:image/jpeg;base64,<?php echo base64_encode($galimage); ?>" alt="Gallery">
+<a href="admin/upload/<?php echo $galimage; ?>" data-lightbox="roadtrip">
+<img src="admin/upload/<?php echo $galimage; ?>" alt="Gallery">
 <i class="icofont-eye"></i>
 </a>
 </div>

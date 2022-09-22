@@ -18,7 +18,7 @@ if($validLogin)
 
     $_SESSION['logout']='1';
 
-header("location: $admin_base_url/login/");
+header("location: $admin_base_url/login.php");
 
 }
 else {

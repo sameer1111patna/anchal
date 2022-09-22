@@ -23,12 +23,20 @@
 <div class="left">
 <ul>
 <li>
+<?php
+        $i=0;
+        $stmt = $classhelper->db_con->prepare("SELECT * FROM `contactdetails_tb` order by id desc");
+        $stmt->execute();
+        $row=$stmt->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+        $portfolioid=$id;
+?>
 <i class="icofont-location-pin"></i>
-<a href="#">Memari,ilampur Purba Bardhaman,pin 713146</a>
+<a href="#"><?php echo $address; ?></a>
 </li>
 <li>
 <i class="icofont-ui-call"></i>
-<a href="tel:8327468420">+91 8327468420</a>
+<a href="tel:8327468420"><?php echo $phone; ?></a>
 </li>
 <li><div id="google_translate_element"></div>
 
@@ -147,6 +155,7 @@ function googleTranslateElementInit() {
 Donate
 <i class="icofont-heart-alt"></i>
 </a>
+<img src="<?php echo $base_url; ?>/anchal-logo-4.png" alt="Logo" style="width:100px;" >
 </div>
 </div>
 </nav>

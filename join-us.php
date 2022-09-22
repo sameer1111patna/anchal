@@ -15,8 +15,20 @@
 
     <?php include "inc/header.php"; ?>
 
-
-<div class="page-title-area title-bg-eight" style="background-image:url(assets/img/80623494_2657935727770629_112136012641075200_o.jpg)">
+    <?php
+        $i=0;
+        $stmt = $classhelper->db_con->prepare("SELECT * FROM `banner_tb` order by id desc");
+        $stmt->execute();
+        $row=$stmt->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+        
+?>
+<style>
+   .title-bg-eight {
+    background-image:url(admin/upload/<?php echo $joinus_banner; ?>)!important;
+}
+</style>
+<div class="page-title-area title-bg-eight" >
 <div class="d-table">
 <div class="d-table-cell">
 <div class="container">

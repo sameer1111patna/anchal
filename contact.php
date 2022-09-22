@@ -8,8 +8,29 @@
 
     <?php include "inc/header.php"; ?>
 
+    <?php
+        $i=0;
+        $stmt = $classhelper->db_con->prepare("SELECT * FROM `banner_tb` order by id desc");
+        $stmt->execute();
+        $row=$stmt->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+        
+?>
+<style>
+   .title-bg-eight {
+    background-image:url(admin/upload/<?php echo $contact_banner; ?>)!important;
+}
+</style>
 
-<div class="page-title-area title-bg-eight" style="background-image:url(assets/img/80623494_2657935727770629_112136012641075200_o.jpg)">
+    <?php
+        $i=0;
+        $stmt = $classhelper->db_con->prepare("SELECT * FROM `contactdetails_tb` order by id desc");
+        $stmt->execute();
+        $row=$stmt->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+        $portfolioid=$id;
+    ?>
+<div class="page-title-area title-bg-eight">
 <div class="d-table">
 <div class="d-table-cell">
 <div class="container">
@@ -17,7 +38,7 @@
 <h2>Contact</h2>
 <ul>
 <li>
-<a href="index.html">Home</a>
+<a href="<?php echo $base_url; ?>">Home</a>
 </li>
 <li>
 <span>Contact</span>
@@ -37,21 +58,21 @@
 <div class="contact-info">
 <i class="icofont-location-pin"></i>
 <span>Location:</span>
-<a href="#">Memari,Ilampur Purba Bardhaman,pin 713146</a>
+<a href="#"><?php echo $address; ?></a>
 </div>
 </div>
 <div class="col-sm-6 col-lg-4">
 <div class="contact-info">
 <i class="icofont-ui-call"></i>
 <span>Phone:</span>
-<a href="tel:8327468420">8327468420</a>
+<a href="tel:8327468420"><?php echo $phone; ?></a>
 </div>
 </div>
 <div class="col-sm-6 offset-sm-3 offset-lg-0 col-lg-4">
 <div class="contact-info">
 <i class="icofont-ui-email"></i>
 <span>Email:</span>
-<a href="mailto:anchalngomemari@gmail.com">anchalngomemari@gmail.com</a>
+<a href="mailto:anchalngomemari@gmail.com"><?php echo $email; ?></a>
 </div>
 </div>
 </div>

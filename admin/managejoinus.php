@@ -138,8 +138,31 @@ if($validx){
                   </tr>
                   </thead>
                   <tbody>
-                  
-                </tbody>
+                  <?php
+                  $i=1;
+                  $stmt = $classhelper->db_con->prepare("SELECT * FROM `joinus_tb` order by id desc");
+                  $stmt->execute();
+                  while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+                    {
+
+                      extract($row);
+                        
+                    ?>
+                  <tr> 
+                      <td><?php echo $i; ?></td>
+                      <td><?php echo $name; ?></td>
+                      <td><?php echo $blood; ?></td>
+                      <td><?php echo $phone; ?></td>
+                      <td><?php echo $dob; ?></td>
+                      <td><?php echo $address; ?></td>
+                      <td><a href="<?php echo $documentsproof; ?>">PDF</a></td>
+                      <td><?php echo $date; ?></td>
+                      <td> <a href="delete.php?id=join&action=<?php echo $id;?>"class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure Want To Delete This ?')"><i class="fa fa-trash"></i></a>
+                    
+                    </td>
+                  </tr>
+                  <?php $i++; } ?>
+                  </tbody>
                 <tfoot>
                 <tr>
              <th>Id</th>
@@ -183,53 +206,3 @@ if($validx){
 </body>
 </html>
 
-<script>
-  var tablex;
-$(document).ready(function() {
-   tablex = $('#example1').DataTable( {
-      "responsive": true, "lengthChange": true, "autoWidth": false,
-        "processing": true,
-        "serverSide": true,
-        "columnDefs": [{ 'targets': [0], 'visible': false },{"render": function createManageBtn(data, type, row) {
-
-
-return '<button id="delBtn" type="button" onclick="deletecon(this,'+row[0]+')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>';
-}, "data": null, "targets": [8]}, {
-      'targets': [6],
-      'searchable': false,
-      'orderable':false,
-      'render': function (data, type, full, meta) {
-
-      
-        return '<a class="btn btn-info" href="' + data +'" alt="tbl_StaffImage" target="_blank">Click Here</a>';
-                        }
-  },],
-        
-        "ajax": $.fn.dataTable.pipeline( {
-            url: '<?php echo $admin_base_url; ?>/exec/fetch_joinus/',
-            pages: 5 // number of pages to cache
-        } )
-    } );
-
-      
-     
-
-      });
-
- 
-        function deletecon(ex,deleteid){
-     
-
-
-     $('#delcontent').children().remove();
-     
-     $('#delcontent').append('<input type="hidden" name="sourceid" value="'+btoa(deleteid)+'">');
-             
-     $('#deletemodal').modal('show');
-     
-             }
-     
-             if ( window.history.replaceState ) {
-       window.history.replaceState( null, null, window.location.href );
-     }
-    </script>

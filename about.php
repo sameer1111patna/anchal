@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zxx">
 
+
 <head>
     <?php include "inc/link.php"; ?>
 </head>
@@ -8,6 +9,19 @@
 
     <?php include "inc/header.php"; ?>
 
+    <?php
+        $i=0;
+        $stmt = $classhelper->db_con->prepare("SELECT * FROM `banner_tb` order by id desc");
+        $stmt->execute();
+        $row=$stmt->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+        
+    ?>
+<style>
+   .title-bg-one {
+    background-image:url(admin/upload/<?php echo $about_banner; ?>)!important;
+}
+</style>
 
 <div class="page-title-area title-bg-one">
 <div class="d-table">
@@ -17,7 +31,7 @@
 <h2>About</h2>
 <ul>
 <li>
-<a href="index.html">Home</a>
+<a href="<?php echo $base_url; ?>">Home</a>
 </li>
 <li>
 <span>About</span>
@@ -28,18 +42,35 @@
 </div>
 </div>
 </div>
-<style>
-    .title-bg-one {
-    background-image: url(assets/img/81786506_2659081867656015_7141842915969466368_o.jpg);
-}
-</style>
 
+<?php
+
+
+$stmt = $classhelper->db_con->prepare("SELECT * FROM `aboutus_tb` order by id desc");
+
+$stmt->execute();
+
+
+		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
+				{
+
+						   extract($row);
+                           $portfolioid=$id;
+                           $content=$content;
+                           $image=$image;
+                        
+                          
+                          
+				}
+				
+                          
+                          ?>
 <div class="about-area pt-100 pb-70">
 <div class="container">
 <div class="row align-items-center">
 <div class="col-lg-6">
 <div class="about-img">
-<img src="assets/img/WhatsApp%20Image%202021-03-25%20at%2012.30.45%20PM.jpeg" alt="About">
+<img src="admin/upload/<?php echo $image;?>" alt="About">
 </div>
 </div>
 <div class="col-lg-6">
@@ -49,28 +80,7 @@
 <h2>About Anchal</h2>
 </div>
 
-<?php
 
-
-$stmt = $classhelper->db_con->prepare("SELECT * FROM `aboutus_tb` order by id desc");
-
-
-	$stmt->execute();
-
-
-		while($row=$stmt->fetch(PDO::FETCH_ASSOC))
-				{
-
-						   extract($row);
-                           $portfolioid=$id;
-                           $content=$content;
-                        
-                          
-                          
-				}
-				
-                          
-                          ?>
                           
                           
 <p>
@@ -129,7 +139,7 @@ $stmt2 = $classhelper->db_con->prepare("SELECT * FROM `team_tb` order by id desc
 <div class="col-sm-6 col-lg-4">
 <div class="team-item">
 <div class="top">
-<img src="data:image/jpeg;base64,<?php echo base64_encode($teamimage); ?>" style="height:620px;object-fit:cover;" alt="Team">
+<img src="admin/upload/<?php echo $teamimage; ?>" style="height:620px;object-fit:cover;" alt="Team">
 
 </div>
 <div class="bottom">

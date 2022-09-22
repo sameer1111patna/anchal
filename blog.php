@@ -8,7 +8,19 @@
 
     <?php include "inc/header.php"; ?>
 
-
+    <?php
+        $i=0;
+        $stmt = $classhelper->db_con->prepare("SELECT * FROM `banner_tb` order by id desc");
+        $stmt->execute();
+        $row=$stmt->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+        
+    ?>
+<style>
+   .title-bg-six {
+    background-image:url(admin/upload/<?php echo $acivity_banner; ?>)!important;
+}
+</style>
 <div class="page-title-area title-bg-six">
 <div class="d-table">
 <div class="d-table-cell">
@@ -28,11 +40,7 @@
 </div>
 </div>
 </div>
-<style>
-    .title-bg-six {
-    background-image: url(<?php echo $base_url; ?>/assets/img/80691729_2657935947770607_8117600674633482240_o.jpg);
-}
-</style>
+
   <?php 
 
 
@@ -107,7 +115,7 @@ $stmt = $classhelper->db_con->prepare("SELECT * FROM `activity_tb` $query LIMIT 
                            $portfolioimage=$image;
                            $portfoliodescription=$description;
                           
-                           $blogpagename=$pagename;
+                          
 
                            $blogdate=$date;
 
@@ -121,8 +129,8 @@ $stmt = $classhelper->db_con->prepare("SELECT * FROM `activity_tb` $query LIMIT 
 <div class="col-sm-6 col-lg-4">
 <div class="blog-item">
 <div class="top">
-<a href="<?php echo $base_url; ?>/blog-single/<?php echo $blogpagename; ?>/">
-<img src="data:image/jpeg;base64,<?php echo base64_encode($portfolioimage); ?>" style="height:368px;object-fit:cover;" alt="Blog">
+<a href="<?php echo $base_url; ?>/blog-single.php?id=<?php echo $portfolioid; ?>/">
+<img src="admin/upload/<?php echo $portfolioimage; ?>" style="height:368px;object-fit:cover;" alt="Blog">
 </a>
 </div>
 <div class="bottom">
@@ -134,14 +142,14 @@ $stmt = $classhelper->db_con->prepare("SELECT * FROM `activity_tb` $query LIMIT 
 <li>
 <i class="icofont-user-alt-3"></i>
 <span>By:</span>
-<a href="<?php echo $base_url; ?>/blog-single/<?php echo $blogpagename; ?>/">Admin</a>
+<a href="<?php echo $base_url; ?>/blog-single.php?id=<?php echo $portfolioid; ?>">Admin</a>
 </li>
 </ul>
 <h3>
-<a href="<?php echo $base_url; ?>/blog-single/<?php echo $blogpagename; ?>/"><?php echo $portfoliotitle; ?></a>
+<a href="<?php echo $base_url; ?>/blog-single.php?id=<?php echo $portfolioid; ?>"><?php echo $portfoliotitle; ?></a>
 </h3>
 <p><?php echo substr(strip_tags($portfoliodescription),0,50); ?></p>
-<a class="blog-btn" href="<?php echo $base_url; ?>/blog-single/<?php echo $blogpagename; ?>/">Read More</a>
+<a class="blog-btn" href="<?php echo $base_url;?>/blog-single.php?id=<?php echo $portfolioid; ?>">Read More</a>
 </div>
 </div>
 </div>

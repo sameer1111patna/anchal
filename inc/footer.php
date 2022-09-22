@@ -4,10 +4,19 @@
 <div class="col-sm-6 col-lg-3">
 <div class="footer-item">
 <div class="footer-logo">
-<a class="logo" href="index.html">
+<a class="logo" href="index.php">
 <img src="<?php echo $base_url; ?>/anchal-logo-1.png" alt="Logo">
+
+<?php
+        $i=0;
+        $stmt = $classhelper->db_con->prepare("SELECT * FROM `footer_tb` order by id desc");
+        $stmt->execute();
+        $row=$stmt->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+        $portfolioid=$id;
+    ?>
 </a>
-<p>Partner with Anchal and together let’s build a better world for tomorrow. A world full of humanity and love and where people give. </p>
+<p><?php echo $description1; ?></p>
 <ul>
 <li>
 <a href="https://www.facebook.com/TeamAnchal" target="_blank">
@@ -54,18 +63,18 @@ while($rowtech=$stmttech->fetch(PDO::FETCH_ASSOC))
                     
                      
                        $techdate=$date;
-                       $technewspagename=$pagename;
+                      
                       
 
                        ?>
 <div class="cause-inner">
 <ul class="align-items-center">
 <li>
-<img src="data:image/jpeg;base64,<?php echo base64_encode($technewsimage); ?>" style="width:77px;height:77px;object-fit:cover;" alt="Cause">
+<img src="admin/upload/<?php echo $technewsimage ; ?>" style="width:77px;height:77px;object-fit:cover;" alt="Cause">
 </li>
 <li>
  <h3>
-<a href="<?php echo $base_url; ?>/blog-single/<?php echo $technewspagename; ?>/"><?php echo $technewstitle; ?></a>
+<a href="<?php echo $base_url; ?>/blog-single.php?id=<?php echo $technewsid; ?>"><?php echo $technewstitle; ?></a>
 </h3>
 </li>
 </ul>
@@ -84,25 +93,25 @@ while($rowtech=$stmttech->fetch(PDO::FETCH_ASSOC))
 <h3>Quick links</h3>
 <ul>
 <li>
-<a href="<?php echo $base_url; ?>/about">
+<a href="<?php echo $base_url; ?>/about.php">
 <i class="icofont-simple-right"></i>
 About
 </a>
 </li>
 <li>
-<a href="<?php echo $base_url; ?>/blog">
+<a href="<?php echo $base_url; ?>/blog.php">
 <i class="icofont-simple-right"></i>
 Activity
 </a>
 </li>
 <li>
-<a href="<?php echo $base_url; ?>/donation">
+<a href="<?php echo $base_url; ?>/donation.php">
 <i class="icofont-simple-right"></i>
 Donation
 </a>
 </li>
 <li>
-<a href="<?php echo $base_url; ?>/contact">
+<a href="<?php echo $base_url; ?>/contact.php">
 <i class="icofont-simple-right"></i>
 Contact us
 </a>
@@ -111,6 +120,8 @@ Contact us
 </div>
 </div>
 </div>
+
+
 <div class="col-sm-6 col-lg-3">
 <div class="footer-item">
 <div class="footer-contact">
@@ -118,31 +129,53 @@ Contact us
 <div class="contact-inner">
 <ul>
 <li>
+<?php
+        $i=0;
+        $stmt = $classhelper->db_con->prepare("SELECT * FROM `contactdetails_tb` order by id desc");
+        $stmt->execute();
+        $row=$stmt->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+        $portfolioid=$id;
+    ?>
 <i class="icofont-location-pin"></i>
-<a href="#">Memari,ilampur Purba Bardhaman,pin 713146</a>
+<a href="#"><?php echo $address; ?></a>
 </li>
 <li>
 <i class="icofont-ui-call"></i>
-<a href="tel:8327468420">8327468420</a>
+<a href="tel:8327468420"><?php echo $phone; ?></a>
 </li>
 </ul>
 </div>
-<div class="contact-inner">
-<ul>
-<li>
-<i class="icofont-location-pin"></i>
-<a href="#">Memari,ilampur Purba Bardhaman,pin 713146</a>
-</li>
-<li>
- <i class="icofont-ui-call"></i>
-<a href="tel:8327468420">8327468420</a>
-</li>
-</ul>
+
 </div>
 </div>
 </div>
+<div class="row">
+<div class="col-sm-6 col-lg-3">
+<div class="footer-item">
+
 </div>
 </div>
+
+
+<div class="col-sm-6 col-lg-6">
+<div class="footer-item">
+<?php echo $description2 ?>
+</div>
+</div>
+
+
+<div class="col-sm-6 col-lg-3">
+<div class="footer-item">
+<?php echo $description3 ?>
+</div>
+</div>
+</div>
+
+</div>
+
+
+
 <div class="copyright-area">
 <p>Copyright ©2021 Anchal. Designed By <a href="https://www.vedastechnocrats.com/" target="_blank">Vedas Technocrats PVT LTD</a></p>
 </div>
